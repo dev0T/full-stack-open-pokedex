@@ -18,6 +18,13 @@ app.get('/health', (req, res) => {
   res.send('ok')
 })
 
+app.get('/fail', (req, res) => {
+  throw 'Fail health check'
+
+  // eslint-disable-next-line no-unreachable
+  res.send('this will never happen')
+})
+
 app.get('/version', (req, res) => {
   res.send('4') // change this string to ensure a new version deployed
 })
