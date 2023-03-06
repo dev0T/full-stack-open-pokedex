@@ -61,19 +61,19 @@ jobs:
         if: ${{ success() }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_USERNAME: ${{ GITHUB_TRIGGERING_ACTOR }}
-          DISCORD_AVATAR: ${{ GITHUB_TRIGGERING_ACTOR.avatar_url }}
-          DISCORD_EMBEDS: '{"color":"5763719","author": {name: "{{ GITHUB_ACTOR }}", url: {{ GITHUB_ACTOR.url }}, icon_url: {{ GITHUB_ACTOR.avatar_url }} }'
+          DISCORD_USERNAME: ${{ github.event.triggering_actor.login }}
+          DISCORD_AVATAR: ${{ github.event.triggering_actor.avatar_url }}
+          DISCORD_EMBEDS: '{"color":"5763719","author": {name: "{{ github.event.actor.login }}", url: {{ github.event.actor.url }}, icon_url: {{ github.event.actor.avatar_url }} }'
         uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
         with:
-          args: 'The project {{ GITHUB_REPOSITORY.full_name }} has been deployed.'
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
       - name: Discord notification - Failure
         if: ${{ failure() }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_USERNAME: ${{ GITHUB_TRIGGERING_ACTOR }}
-          DISCORD_AVATAR: ${{ GITHUB_TRIGGERING_ACTOR.avatar_url }}
-          DISCORD_EMBEDS: '{"color":"15548997","author": {name: "{{ GITHUB_ACTOR }}", url: {{ GITHUB_ACTOR.url }}, icon_url: {{ GITHUB_ACTOR.avatar_url }} }'
+          DISCORD_USERNAME: ${{ github.event.triggering_actor.login }}
+          DISCORD_AVATAR: ${{ github.event.triggering_actor.avatar_url }}
+          DISCORD_EMBEDS: '{"color":"15548997","author": {name: "{{ github.event.actor.login }}", url: {{ github.event.actor.url }}, icon_url: {{ github.event.actor.avatar_url }} }'
         uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
         with:
-          args: 'The project {{ GITHUB_REPOSITORY.full_name }} deployment has failed.'
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} deployment has failed.'
