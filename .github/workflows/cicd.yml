@@ -30,16 +30,17 @@ jobs:
           command: npm run test:e2e
           start: npm run start:prod
           wait-on: http://localhost:5000
-      - name: Discord notification - Success
-        uses: rjstone/discord-webhook-notify@v1
-        if: success()
-        with:
-          severity: info
-          username: ${{ github.event.sender.login }}
-          avatarUrl: ${{ github.event.sender.avatar_url }}
-          text: Check succeeded.
-          description: ${{ github.head_commit.message }}
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      # For testing
+      # - name: Discord notification - Success
+      #   uses: rjstone/discord-webhook-notify@v1
+      #   if: success()
+      #   with:
+      #     severity: info
+      #     username: ${{ github.event.sender.login }}
+      #     avatarUrl: ${{ github.event.sender.avatar_url }}
+      #     text: Check succeeded.
+      #     description: ${{ github.head_commit.message }}
+      #     webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   tag_release:
     needs: [check]
     # Only tags when merging to the main branch
@@ -74,8 +75,7 @@ jobs:
           severity: error
           username: ${{ github.event.sender.login }}
           avatarUrl: ${{ github.event.sender.avatar_url }}
-          text: App deployment has failed.
-          description: ${{ github.head_commit.message }}
+          details: Deployment failed.
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Discord notification - Success
         uses: rjstone/discord-webhook-notify@v1
@@ -84,6 +84,5 @@ jobs:
           severity: info
           username: ${{ github.event.sender.login }}
           avatarUrl: ${{ github.event.sender.avatar_url }}
-          text: App has been deployed successfully.
-          description: ${{ github.head_commit.message }}
+          details: Deployment successful.
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
