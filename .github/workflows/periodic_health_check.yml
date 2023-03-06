@@ -1,25 +1,26 @@
 name: Periodic Health check
 
 on:
-  push:
-    branches:
-      - dev
+  # Push if needed for testing the workflow
+  # push:
+  #   branches:
+  #     - dev
   schedule:
-    # This will happen every 5 minutes
-    - cron: '*/5 * * * *'
+    # This will happen every day at 12pm
+    - cron: '0 12 * * *'
 
 jobs:
-  Fail:
-    runs-on: ubuntu-20.04
+  health_check:
+    runs-on: ubuntu-20.04 
     steps:
-      - name: Check for not heathy route
-        uses: Jtalk/url-health-check-action@v3.1
-        with:
-          url: https://bold-tree-299.fly.dev/fail
-  Success:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Check for healthy route
+      - name: health check, returns 200
         uses: Jtalk/url-health-check-action@v3.1
         with:
           url: https://bold-tree-299.fly.dev/health
+#   Fail:
+#     runs-on: ubuntu-20.04
+#     steps:
+#       - name: health check on /fail, throws an error
+#         uses: Jtalk/url-health-check-action@v3.1
+#         with:
+#           url: https://bold-tree-299.fly.dev/fail
