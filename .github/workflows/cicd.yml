@@ -30,6 +30,16 @@ jobs:
           command: npm run test:e2e
           start: npm run start:prod
           wait-on: http://localhost:5000
+      - name: Discord notification - Success
+        if: ${{ success() }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_USERNAME: ${{ github.event.triggering_actor.login }}
+          DISCORD_AVATAR: ${{ github.event.triggering_actor.avatar_url }}
+          DISCORD_EMBEDS: '{"color":"5763719","author": {"name": "{{ github.event.actor.login }}", "url": {{ github.event.actor.url }}, "icon_url": {{ github.event.actor.avatar_url }} }'
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+        with:
+          args: 'New commit on {{ EVENT_PAYLOAD.repository.full_name }}.'
   tag_release:
     needs: [check]
     # Only tags when merging to the main branch
@@ -63,7 +73,7 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           DISCORD_USERNAME: ${{ github.event.triggering_actor.login }}
           DISCORD_AVATAR: ${{ github.event.triggering_actor.avatar_url }}
-          DISCORD_EMBEDS: '{"color":"5763719","author": {name: "{{ github.event.actor.login }}", url: {{ github.event.actor.url }}, icon_url: {{ github.event.actor.avatar_url }} }'
+          DISCORD_EMBEDS: '{"color":"5763719","author": {"name": "{{ github.event.actor.login }}", "url": {{ github.event.actor.url }}, "icon_url": {{ github.event.actor.avatar_url }} }'
         uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
         with:
           args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
@@ -73,7 +83,7 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           DISCORD_USERNAME: ${{ github.event.triggering_actor.login }}
           DISCORD_AVATAR: ${{ github.event.triggering_actor.avatar_url }}
-          DISCORD_EMBEDS: '{"color":"15548997","author": {name: "{{ github.event.actor.login }}", url: {{ github.event.actor.url }}, icon_url: {{ github.event.actor.avatar_url }} }'
+          DISCORD_EMBEDS: '{"color":"15548997","author": {"name": "{{ github.event.actor.login }}", "url": {{ github.event.actor.url }}, "icon_url": {{ github.event.actor.avatar_url }} }'
         uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
         with:
           args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} deployment has failed.'
